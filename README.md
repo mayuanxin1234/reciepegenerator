@@ -1,1 +1,1 @@
-This is a recipe generator using technologies from CHATGPT and NTUC fairprice to give reciepe ideas and generate a shopping list at NTUC. 
+This is a recipe generator using technologies from CHATGPT and NTUC fairprice to give recipe ideas and generate a shopping list at NTUC. 
