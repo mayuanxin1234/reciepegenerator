@@ -13,10 +13,12 @@ export default function generator() {
     // Call api when submit button clicked
     async function onSubmit(event) {
         event.preventDefault();
+        console.log(event)
         
         try {
           document.getElementById("listofitems").innerHTML = '';
           document.getElementById("ntucitems").innerHTML = '';
+
           const loader = document.querySelector('#loader')
           loader.style.display = 'block';
           const input = getInput() + ".Give me a shopping list and recipes in Singapore supermarket with 1 weight per item. List items with - and weight in (). Recipes should have instructions on how to make the food. I only want 1 shopping list.";
@@ -57,7 +59,7 @@ export default function generator() {
             }
             console.log("in loop")
             document.getElementById("ntucitems").innerHTML +=
-            '<div style = "border-style: solid;border-width: medium;"><img src = "' + shoppingData[a][0] + '"/><a href = "https://www.fairprice.com.sg' + shoppingData[a][1] + '"><h3>' + shoppingData[a][2] + '</h3></a>' + '<p>' + shoppingData[a][3] + '</p></div>'
+            '<div style = "border-style: solid;border-width: medium;"><img src = "' + shoppingData[a][0] + '"/><a href = "https://www.fairprice.com.sg' + shoppingData[a][1] +  '" target="_blank"' + '><h3>' + shoppingData[a][2] + '</h3></a>' + '<p>' + shoppingData[a][3] + '</p></div>'
           }
 
           document.getElementById("listofitems").innerHTML = data.result;
@@ -126,6 +128,16 @@ export default function generator() {
           return result;  
     }
 
+    function fillInput1() {
+      document.getElementById("first").value = "I want to host a party for five";
+    }
+    function fillInput2() {
+      document.getElementById("first").value = "I want a mexican inspired party for two";
+    }
+    function fillInput3() {
+      document.getElementById("first").value = "I want to cook for my family of four";
+    }
+
 
     return (
         <main className={styles.main}>
@@ -139,27 +151,29 @@ export default function generator() {
         <form action="/send-data-here" method="post">
           <label className={styles.input}>Input:</label>
           <input type="text" id="first" name="first" className = {styles.inputBox} 
-          placeholder = "Type here or select the suggested categories below..."/>
+          placeholder = "Type here or select the suggested prompts below..."/>
           <button type="submit" className={styles.submitButton} onClick={onSubmit}>Submit</button>
         </form>
           </div>
           <div id='loader' className={styles.loader} >Loading...</div>
           <div className = {styles.input}>
           <h3>Suggested:</h3>
-          <button className = {styles.submitButton}>Party</button>
-          <button className = {styles.submitButton}>Meal-Prep</button>
-          <button className = {styles.submitButton}>Family Cooking</button>
+          <button className = {styles.submitButton} onClick = {fillInput1}>I want to host a party for five</button>
+          <button className = {styles.submitButton} onClick={fillInput2}>I want a mexican inspired party for two</button>
+          <button className = {styles.submitButton} onClick={fillInput3}>I want to cook for my family of four</button>
           </div>
-          <div>
+          <div className={styles.recommendeditems}>
           <h3>Recommended Items:</h3>
           <p id ='listofitems' className={styles.listofitems}></p>
           </div>
-          <div>
+          <div className={styles.clickitem}>
           <h2>Click on each item to find out more</h2>
           <div id = 'ntucitems' className={styles.ntucitems}></div>
         </div>
-        <div>
+        <div className={styles.buynowbutton}>
+        <a href = 'https://www.fairprice.com.sg/'>
           <button className = {styles.submitButton} >Buy on NTUC now!</button>
+          </a>
         </div>
       </main>
     );
