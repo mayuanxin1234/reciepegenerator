@@ -19,9 +19,16 @@ export default function generator() {
           document.getElementById("listofitems").innerHTML = '';
           document.getElementById("ntucitems").innerHTML = '';
 
+          
+          var input = getInput() 
+          console.log(input)
+          if (input === null || input.match(/^ *$/) !== null) {
+            alert("Error! Please enter something in the prompt.")
+            return;
+          }
+          input += ".Give me a shopping list and recipes in Singapore supermarket with 1 weight per item. List items with - and weight in (). Recipes should have instructions on how to make the food. I only want 1 shopping list.";
           const loader = document.querySelector('#loader')
           loader.style.display = 'block';
-          const input = getInput() + ".Give me a shopping list and recipes in Singapore supermarket with 1 weight per item. List items with - and weight in (). Recipes should have instructions on how to make the food. I only want 1 shopping list.";
           const response = await fetch("/api/generate", {
             method: "POST",
             headers: {
@@ -81,6 +88,8 @@ export default function generator() {
           alert(error.message);
         }
     }
+    
+
 
     function getShoppingList(data) {
       var shoppingList;
@@ -137,6 +146,23 @@ export default function generator() {
     function fillInput3() {
       document.getElementById("first").value = "I want to cook for my family of four";
     }
+    function copy() {
+      // Get the text field
+      var copyText = document.getElementById("listofitems");
+
+      console.log(copyText.innerHTML)
+      
+      if (copyText.innerHTML == "") {
+        alert("Nothing to copy! Please enter prompt first.")
+        return;
+      }
+    
+       // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.innerHTML);
+    
+      // Alert the copied text
+      alert("Copied the Recipe!");
+    }
 
 
     return (
@@ -162,18 +188,29 @@ export default function generator() {
           <button className = {styles.submitButton} onClick={fillInput2}>I want a mexican inspired party for two</button>
           <button className = {styles.submitButton} onClick={fillInput3}>I want to cook for my family of four</button>
           </div>
-          <div className={styles.recommendeditems}>
+          <div id = 'recommendeditems' className={styles.recommendeditems}>
           <h3>Recommended Items:</h3>
           <p id ='listofitems' className={styles.listofitems}></p>
+          <div id = 'copytoclipboard'>
+          <button className = {styles.submitButton} onClick = {copy}>Copy to Clipboard</button>          
+          </div>
           </div>
           <div className={styles.clickitem}>
           <h2>Click on each item to find out more</h2>
           <div id = 'ntucitems' className={styles.ntucitems}></div>
         </div>
         <div className={styles.buynowbutton}>
-        <a href = 'https://www.fairprice.com.sg/'>
+        <a href = 'https://www.fairprice.com.sg/' target="_blank">
           <button className = {styles.submitButton} >Buy on NTUC now!</button>
           </a>
+        </div>
+        <div>
+          <p>
+            Disclaimer: Items might not be accurate, please exercise discretion when using this application.
+          </p>
+          <p>
+            Proudly developed by: Ma Yuanxin. View my resume at: <a href = 'https://mayuanxin1234.github.io/resume-website/' target = '_blank'>https://mayuanxin1234.github.io/resume-website/</a>
+          </p>
         </div>
       </main>
     );

@@ -1,20 +1,55 @@
 const puppeteer = require("puppeteer-extra")
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+const { Cluster } = require('puppeteer-cluster');
 
 puppeteer.use(StealthPlugin())
 
 const url = 'https://www.fairprice.com.sg/'
 export default async function getNtuc (req, res) {
     try {
-    const browser = await puppeteer.launch({headless: true})
-    const page = await browser.newPage()
-    await page.goto(url)
+    //const browser = await puppeteer.launch({headless: false})
+    //const page = await browser.newPage()
+    //await page.goto(url)
 
     const shoppingList = req.body.shoppingList
 
     var result = []
 
+    var resultCounter = 0
+
     console.log(shoppingList)
+
+    //var promises = []
+
+    //var currPromisesCounter = 0
+    
+
+    await (async () => { 
+        const cluster = await Cluster.launch({
+          concurrency: Cluster.CONCURRENCY_CONTEXT,
+          maxConcurrency: 8,
+        });
+    await cluster.task(async ({ page, data: url }) => {
+            await page.goto(url);
+            var resultOfData = await page.evaluate(() => {
+                const firstItem = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")
+        
+                const data = []
+                //image
+                data[0] = firstItem?.querySelector(".sc-1plwklf-4.bwtTXZ span img").getAttribute("src")
+                //link
+                data[1] = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")?.querySelector("a").getAttribute("href")
+                //Title
+                data[2] = firstItem?.querySelector(".sc-1bsd7ul-1.eKBQTR").textContent
+                //Price
+                data[3] = firstItem?.querySelector(".sc-1bsd7ul-1.sc-1svix5t-1.cyZSLh.ilXfia").textContent
+        
+                return data
+        
+            })
+            result[resultCounter] = resultOfData
+            resultCounter++
+        });
 
     for (let i = 0; i < shoppingList.length; i++) {
 
@@ -33,8 +68,59 @@ export default async function getNtuc (req, res) {
             }
         }
 
-        await page.goto(urlShoppingList)
+        console.log(urlShoppingList)
+        
+        cluster.queue(urlShoppingList);
 
+        //await page.goto(urlShoppingList)
+
+        /*
+        promises[currPromisesCounter] = new Promise((resolve, reject) => {
+            var currPage;
+            (async () => { currPage = await browser.newPage()})();
+            (async () => { await currPage.goto(urlShoppingList) })();
+            (async () => { await currPage.evaluate(() => {
+                const firstItem = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")
+        
+                const data = []
+                //image
+                data[0] = firstItem?.querySelector(".sc-1plwklf-4.bwtTXZ span img").getAttribute("src")
+                //link
+                data[1] = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")?.querySelector("a").getAttribute("href")
+                //Title
+                data[2] = firstItem?.querySelector(".sc-1bsd7ul-1.eKBQTR").textContent
+                //Price
+                data[3] = firstItem?.querySelector(".sc-1bsd7ul-1.sc-1svix5t-1.cyZSLh.ilXfia").textContent
+        
+                return data
+        
+            })
+          });
+            console.log("inpromise")})()
+            */
+
+
+
+        /*
+        promises[currPromisesCounter] = browser.newPage().goto(urlShoppingList).evaluate(() => {
+            const firstItem = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")
+    
+            const data = []
+            //image
+            data[0] = firstItem?.querySelector(".sc-1plwklf-4.bwtTXZ span img").getAttribute("src")
+            //link
+            data[1] = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")?.querySelector("a").getAttribute("href")
+            //Title
+            data[2] = firstItem?.querySelector(".sc-1bsd7ul-1.eKBQTR").textContent
+            //Price
+            data[3] = firstItem?.querySelector(".sc-1bsd7ul-1.sc-1svix5t-1.cyZSLh.ilXfia").textContent
+    
+            return data
+    
+        })
+        */
+        //currPromisesCounter++
+    /*    
     var itemData = await page.evaluate(() => {
         const firstItem = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")
 
@@ -52,9 +138,22 @@ export default async function getNtuc (req, res) {
 
     })
     result[i] = itemData
+    */
     }
+    await cluster.idle();
+    await cluster.close();
+})()
 
-    await browser.close() 
+    /*
+    await cluster.execute().then((data) => {
+        console.log(data)
+        result[resultCounter] = data;
+        resultCounter++;
+    })
+    */
+
+
+    //await browser.close() 
     
     console.log(JSON.stringify(result))
 
