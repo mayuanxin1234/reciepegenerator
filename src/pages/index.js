@@ -209,7 +209,7 @@ export default function generator() {
             Disclaimer: Items might not be accurate, please exercise discretion when using this application.
           </p>
           <p>
-            Proudly developed by: Ma Yuanxin. View my resume at: <a href = 'https://mayuanxin1234.github.io/resume-website/' target = '_blank'>https://mayuanxin1234.github.io/resume-website/</a>
+            Proudly developed by: Ma Yuanxin. View my resume at: <a href = 'https://mayuanxin1234.github.io/resumewebsite/' target = '_blank'>https://mayuanxin1234.github.io/resumewebsite/</a>
           </p>
         </div>
       </main>
