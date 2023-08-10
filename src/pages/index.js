@@ -66,7 +66,7 @@ export default function generator() {
             }
             console.log("in loop")
             document.getElementById("ntucitems").innerHTML +=
-            '<div style = "border-style: solid;border-width: medium;"><img src = "' + shoppingData[a][0] + '"/><a href = "https://www.fairprice.com.sg' + shoppingData[a][1] +  '" target="_blank"' + '><h3>' + shoppingData[a][2] + '</h3></a>' + '<p>' + shoppingData[a][3] + '</p></div>'
+            '<div style = "border-style: solid;border-width: medium;"><img width="320" height="320" src = "' + shoppingData[a][0] + '"/><a href = "https://www.fairprice.com.sg' + shoppingData[a][1] +  '" target="_blank"' + '><h3>' + shoppingData[a][2] + '</h3></a>' + '<p>' + shoppingData[a][3] + '</p></div>'
           }
 
           document.getElementById("listofitems").innerHTML = data.result;

@@ -32,13 +32,13 @@ export default async function getNtuc (req, res) {
     await cluster.task(async ({ page, data: url }) => {
             await page.goto(url);
             var resultOfData = await page.evaluate(() => {
-                const firstItem = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")
+                const firstItem = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container")
         
                 const data = []
                 //image
-                data[0] = firstItem?.querySelector(".sc-1plwklf-4.bwtTXZ span img").getAttribute("src")
+                data[0] = firstItem?.querySelector(".sc-1plwklf-4.bwtTXZ")?.querySelector("span")?.querySelector("img").getAttribute("src")
                 //link
-                data[1] = document.querySelector(".sc-1plwklf-0.jJrMPd.product-container.has_ppp")?.querySelector("a").getAttribute("href")
+                data[1] = document.querySelector(".sc-1plwklf-0.jJrMPd")?.querySelector("a").getAttribute("href")
                 //Title
                 data[2] = firstItem?.querySelector(".sc-1bsd7ul-1.eKBQTR").textContent
                 //Price
