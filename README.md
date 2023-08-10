@@ -14,5 +14,8 @@ To get CHATGPT API key:
 
 Demo video: 
 
-https://github.com/mayuanxin1234/reciepegenerator/assets/95178026/e4532224-a442-43a3-bed7-ee664e597e72
+
+
+
+https://github.com/mayuanxin1234/reciepegenerator/assets/95178026/e86c3398-53e9-4e7d-8b56-4ba579354368
 
