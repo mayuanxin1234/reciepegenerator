@@ -12,14 +12,12 @@ export default function generator() {
   // Call api when submit button clicked
   async function onSubmit(event) {
     event.preventDefault();
-    console.log(event);
 
     try {
       document.getElementById("listofitems").innerHTML = "";
       document.getElementById("ntucitems").innerHTML = "";
 
       var input = getInput();
-      console.log(input);
       if (input === null || input.match(/^ *$/) !== null) {
         alert("Error! Please enter something in the prompt.");
         return;
@@ -39,9 +37,7 @@ export default function generator() {
       const data = await response.json();
       // simply print out the result in the console
 
-      console.log(data.result);
       const shoppingList = getShoppingList(data);
-      console.log("1");
       const itemsToDisplay = await fetch("/api/getNtuc", {
         method: "POST",
         headers: {
@@ -49,12 +45,8 @@ export default function generator() {
         },
         body: JSON.stringify({ shoppingList: shoppingList }),
       });
-      console.log("2");
       var shoppingData = await itemsToDisplay.json();
       shoppingData = JSON.parse(shoppingData.result);
-      console.log("done");
-      console.log(shoppingData[0]);
-      console.log(shoppingData[0][1]);
 
       for (let a = 0; a < shoppingData.length; a++) {
         if (
@@ -65,7 +57,6 @@ export default function generator() {
         ) {
           continue;
         }
-        console.log("in loop");
         document.getElementById("ntucitems").innerHTML +=
           '<div style = "border-style: solid;border-width: medium;"><img width="320" height="320" src = "' +
           shoppingData[a][0] +
@@ -82,7 +73,6 @@ export default function generator() {
 
       document.getElementById("listofitems").innerHTML = data.result;
 
-      console.log("Render finish");
 
       loader.style.display = "none";
 
@@ -111,8 +101,6 @@ export default function generator() {
         data.result[i + 4] == "p" &&
         data.result[i + 5] == "e"
       ) {
-        console.log(i);
-        console.log(data.result.substring(16, i));
         shoppingList = data.result.substring(0, i);
         break;
       }
@@ -128,7 +116,6 @@ export default function generator() {
           result[index] = currentItem;
           index++;
         }
-        console.log(currentItem);
         currentItem = "";
         continue;
       }
@@ -159,8 +146,6 @@ export default function generator() {
   function copy() {
     // Get the text field
     var copyText = document.getElementById("listofitems");
-
-    console.log(copyText.innerHTML);
 
     if (copyText.innerHTML == "") {
       alert("Nothing to copy! Please enter prompt first.");

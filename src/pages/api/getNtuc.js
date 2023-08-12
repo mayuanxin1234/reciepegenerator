@@ -13,12 +13,6 @@ export default async function getNtuc(req, res) {
 
     var resultCounter = 0;
 
-    console.log(shoppingList);
-
-    //var promises = []
-
-    //var currPromisesCounter = 0
-
     await (async () => {
       const cluster = await Cluster.launch({
         concurrency: Cluster.CONCURRENCY_CONTEXT,
@@ -74,19 +68,14 @@ export default async function getNtuc(req, res) {
           }
         }
 
-        console.log(urlShoppingList);
-
         cluster.queue(urlShoppingList);
       }
       await cluster.idle();
       await cluster.close();
     })();
 
-    console.log(JSON.stringify(result));
-
     res.status(200).json({ result: JSON.stringify(result) });
-
-    console.log("hi");
+    
   } catch (err) {
     res.status(500).send({ error: "failed to fetch data" });
   }
